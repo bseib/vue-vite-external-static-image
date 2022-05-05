@@ -56,6 +56,18 @@ and those assets won't be moved into the newer, smaller vue+vite project. Rather
 of this larger backend, like the backend-integration docs suggest: https://vitejs.dev/guide/backend-integration.html  I.e. the
 server injects the appropriate links/files into the document based on the `manifest.json` for that entry point.
 
+The (public directory)[https://vitejs.dev/guide/assets.html#the-public-directory] docs say that you can place an asset in the
+special `public` directory, and it will be served from `/` during devlopment. (That's presuming you develop directly with the
+vite server only for development. In our case we inject a `<script type="module" src="http://localhost:3000/blah/blah/some-page.ts"></script>`
+at the right place in our document, which is being served from `http://localhost:7000/path/to/our/document`.)
+
+Perhaps "public directory" is the secret sauce to making a build be aware of external images...?
+
+No, `npm run build` still generates `js` files containing that erroneous `import` statement, and that still breaks the client
+at runtime when you build for production. Furthermore, in our situation, the bigger existing server serves the static image from
+its own location (during both development and production), and the special `public` directory (only "special" to vue+vite) is
+never actually needed or used by the existing backend server.
+
 ### Why two entry points in this example?
 
 With two, then the code-in-common (i.e. `plugin-vue_export-helper.c7c75f4c.js`) is chunked out on its own, leaving very small
