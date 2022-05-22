@@ -18,7 +18,13 @@ export default defineConfig({
       ],
     }
   },
-  plugins: [vue()],
+  plugins: [vue({
+    template: {
+      transformAssetUrls: {
+        includeAbsolute: false
+      }
+    }
+  })],
   // resolve: {
   //   alias: {
   //     '@': fileURLToPath(new URL('./src', import.meta.url))
